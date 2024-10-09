@@ -1,11 +1,15 @@
-import { defineNuxtConfig } from 'nuxt/config';
-import en from './lang/en.json';
+import { defineNuxtConfig } from 'nuxt/config'
+import en from './lang/en.json'
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
   site: {
-    url: process.env.NODE_ENV === 'dev' ? 'http://localhost:3000' : 'https://www.cvfy.xyz',
+    url:
+      // eslint-disable-next-line node/prefer-global/process
+      process.env.NODE_ENV === 'dev'
+        ? 'http://localhost:3000'
+        : 'https://www.cvfy.xyz',
   },
 
   imports: {
@@ -15,40 +19,15 @@ export default defineNuxtConfig({
   app: {
     // Global page headers (https://go.nuxtjs.dev/config-head)
     head: {
-      title:
-        'CvFy - Create, visulize and save your CV as PDF in a few minutes and free!',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        {
-          hid: 'author',
-          name: 'author',
-          content: 'claudiabdm',
-        },
         {
           hid: 'google-site-verification',
           name: 'google-site-verification',
           content: 'CGbgWpLEg4fyBPWujKEYS3rrwZR4mMU7XfsDEGArchg',
         },
-        {
-          hid: 'twitter:card',
-          name: 'twitter:card',
-          content: 'summary_large_image',
-        },
-        {
-          hid: 'twitter:url',
-          name: 'twitter:url',
-          content: 'https://cvfy.xyz/',
-        },
-        {
-          hid: 'twitter:image',
-          name: 'twitter:image',
-          content: 'icon.png',
-        },
       ],
-      htmlAttrs: {
-        lang: 'es',
-      },
     },
   },
 
@@ -57,12 +36,18 @@ export default defineNuxtConfig({
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
-    // https://go.nuxtjs.dev/pwa
+    'nuxt-module-eslint-config',
     '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxtjs/tailwindcss',
     '@vite-pwa/nuxt',
+    '@nuxt/fonts',
+    '@nuxt/image',
   ],
+
+  eslintConfig: {
+    setup: false,
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
@@ -113,8 +98,13 @@ export default defineNuxtConfig({
         file: 'zh.json',
         name: 'Chinese',
       },
+      {
+        code: 'pt',
+        file: 'pt.json',
+        name: 'Portuguese',
+      },
     ],
-    lazy: true,
+    lazy: false,
     langDir: 'lang/',
     defaultLocale: 'en',
     detectBrowserLanguage: {
@@ -131,28 +121,24 @@ export default defineNuxtConfig({
   },
 
   pwa: {
-    includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+    devOptions: {
+      enabled: true,
+    },
+    registerType: 'autoUpdate',
+    pwaAssets: {
+      config: true,
+    },
     manifest: {
       name: en['title-tag'],
       short_name: 'CvFy',
       description: en.description,
       theme_color: '#f3f4f6',
-      icons: [
-        {
-          src: 'pwa-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-      ],
     },
   },
 
   sitemap: {
     autoI18n: true,
   },
-});
+
+  compatibilityDate: '2024-10-08',
+})
