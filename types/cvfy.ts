@@ -4,51 +4,72 @@ export const LEVELS = [
   'professional-working',
   'full-professional',
   'native-bilingual',
-] as const;
+] as const
 
-export type Level = (typeof LEVELS)[number];
+export type Level = (typeof LEVELS)[number]
 export interface Cv {
-  profileImageDataUri?: string | null;
-  jobTitle: string;
-  name: string;
-  lastName: string;
-  email: string;
-  location: string;
-  phoneNumber: string;
-  aboutme: string;
-  jobSkills: string[];
-  softSkills: string[];
-  languages: { lang: string; level: Level }[];
-  linkedin: string;
-  twitter: string;
-  github: string;
-  website: string;
-  education: CvEvent[];
-  work: CvEvent[];
-  projects: CvEvent[];
-  displaySocial: boolean;
-  displayEducation: boolean;
-  displayProjects: boolean;
-  activeColor: string;
+  layout?: 'one-column' | 'two-column'
+  profileImageDataUri?: string | null
+  jobTitle: string
+  name: string
+  lastName: string
+  email: string
+  location: string
+  phoneNumber: string
+  aboutme: string
+  jobSkills: string[]
+  displayJobSkills?: boolean
+  softSkills: string[]
+  displaySoftSkills?: boolean
+  languages: { lang: string, level: Level }[]
+  displayLanguages?: boolean
+  interests: string[]
+  displayInterests?: boolean
+  linkedin: string
+  twitter: string
+  github: string
+  website: string
+  education: CvEvent[]
+  work: CvEvent[]
+  projects: CvEvent[]
+  displaySocial: boolean
+  displayEducation: boolean
+  displayProjects: boolean
+  activeColor: string
 }
 export interface CvEvent {
-  title: string;
-  location: string;
-  from: Date | any;
-  to: Date | any;
-  current: boolean;
-  summary: string;
+  id: string
+  title: string
+  location: string
+  from: Date | any
+  to: Date | any
+  displayDate: boolean
+  current: boolean
+  summary: string
 }
 
-export type SkillType = 'jobSkills' | 'softSkills' | 'languages';
+export type OptionalSection = 'displaySocial' | 'displayEducation' | 'displayProjects'
+
+export type SkillType =
+  'jobSkills' |
+  'softSkills' |
+  'languages' |
+  'interests'
 
 export interface LanguagesSkill {
-  skill: { lang: string; level: Level };
-  skillType: 'languages';
+  skill: { lang: string, level: Level }
+  skillType: 'languages'
 }
 export interface DefaultSkill {
-  skill: string;
-  skillType: 'jobSkills' | 'softSkills';
+  skill: string
+  skillType: Exclude<SkillType, 'languages'>
 }
 
-export type SectionName = 'education' | 'work' | 'projects';
+export type Skill = DefaultSkill['skill'] | LanguagesSkill['skill']
+
+export const SectionNameList = {
+  work: 'experience',
+  education: 'education',
+  projects: 'projects',
+} as const
+export type SectionName = keyof typeof SectionNameList
